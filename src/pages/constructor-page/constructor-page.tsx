@@ -1,19 +1,37 @@
-import { useSelector } from '../../services/store';
+import {
+  TypedUseSelectorHook,
+  useDispatch as dispatchHook,
+  useSelector as selectorHook
+} from 'react-redux';
+import store, { RootState, useSelector } from '../../services/store';
 
+import { BurgerConstructor } from '../../components';
+import { BurgerIngredients } from '../../components';
+import { FC } from 'react';
+import { Preloader } from '../../components/ui';
+import { getIngredients } from '../../slices/ingredientsSlice';
 import styles from './constructor-page.module.css';
 
-import { BurgerIngredients } from '../../components';
-import { BurgerConstructor } from '../../components';
-import { Preloader } from '../../components/ui';
-import { FC } from 'react';
-
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const ingredients = useSelector(getIngredients);
+
+  if (ingredients.loading) {
+    return <Preloader />;
+  }
+
+  if (!ingredients.loading && ingredients.error) {
+    return (
+      <p className='error'>Запрос завершился с ошибкой: {ingredients.error}</p>
+    );
+  }
+
+  if (!ingredients.loading && ingredients.ingredients.length === 0) {
+    return <p className='message'>Нет ни одного ингредиента</p>;
+  }
 
   return (
     <>
-      {isIngredientsLoading ? (
+      {ingredients.loading ? (
         <Preloader />
       ) : (
         <main className={styles.containerMain}>

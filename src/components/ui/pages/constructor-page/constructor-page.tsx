@@ -1,16 +1,21 @@
-import { FC } from 'react';
-
-import styles from './constructor-page.module.css';
+import { BurgerConstructor, BurgerIngredients } from '@components';
 
 import { ConstructorPageUIProps } from './type';
+import { FC } from 'react';
 import { Preloader } from '@ui';
-import { BurgerIngredients, BurgerConstructor } from '@components';
+import { getIngredientsLoader } from '../../../../slices/ingredientsSlice';
+import styles from './constructor-page.module.css';
+import { useSelector } from '../../../../services/store';
 
 export const ConstructorPageUI: FC<ConstructorPageUIProps> = ({
   isIngredientsLoading
-}) => (
+}) => { 
+  
+  const isLoading = useSelector(getIngredientsLoader);
+  
+  return (
   <>
-    {isIngredientsLoading ? (
+    {isLoading ? (
       <Preloader />
     ) : (
       <main className={styles.containerMain}>
@@ -26,4 +31,4 @@ export const ConstructorPageUI: FC<ConstructorPageUIProps> = ({
       </main>
     )}
   </>
-);
+)}
