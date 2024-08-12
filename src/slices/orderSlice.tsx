@@ -1,27 +1,27 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
-import { getOrdersApi, orderBurgerApi } from '@api';
-
-import { stat } from 'fs';
+import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
 
 type TOrderState = {
   composedOrderIngredients: string[];
   loading: boolean;
   error: string | undefined;
-  // ingredientsFull: Array<TConstructorIngredient>;
   buns: TConstructorIngredient | null;
   mainsAndSaucesIngr: Array<TConstructorIngredient>;
   readyOrders: Array<TOrder>;
+  justDoneOrder: TOrder | null;
+  orderByNumber: TOrder | undefined;
 };
 
 const initialState: TOrderState = {
   composedOrderIngredients: [],
   loading: false,
   error: '',
-  // ingredientsFull: [],
   buns: null,
   mainsAndSaucesIngr: [],
-  readyOrders: []
+  readyOrders: [],
+  justDoneOrder: null,
+  orderByNumber: undefined
 };
 
 export const makeOrderThunk = createAsyncThunk(
@@ -34,6 +34,16 @@ export const getReadyOrdersThunk = createAsyncThunk(
   async () => await getOrdersApi()
 );
 
+export const getOrderByNumberThunk = createAsyncThunk(
+  'order/get by number',
+  async (number: number) =>
+    await getOrderByNumberApi(number).then((data) => {
+      if (data.success) {
+        return data.orders.find((o) => o.number === number);
+      }
+    })
+);
+
 const orderSlice = createSlice({
   name: 'order',
   initialState,
@@ -42,8 +52,6 @@ const orderSlice = createSlice({
       state,
       action: PayloadAction<TConstructorIngredient>
     ) => {
-      // state.composedOrderIngredients.push(action.payload._id);
-      // state.ingredientsFull.push(action.payload);
       if (action.payload.type === 'bun') {
         state.buns = action.payload;
       }
@@ -58,11 +66,6 @@ const orderSlice = createSlice({
       state.mainsAndSaucesIngr = state.mainsAndSaucesIngr.filter(
         (i) => i.id !== action.payload.id
       );
-    },
-    addBottomBun: (state, action) => {
-      if (state.buns) {
-        state.composedOrderIngredients.push(state.buns._id);
-      }
     },
     moveUpIngredientInOrder: (state, action: PayloadAction<number>) => {
       state.mainsAndSaucesIngr.splice(
@@ -80,21 +83,26 @@ const orderSlice = createSlice({
     },
     composeOrderIngredients: (state) => {
       if (state.buns && state.mainsAndSaucesIngr) {
+        const composedIngredients = [];
+        composedIngredients.push(state.buns._id);
         state.composedOrderIngredients.push(state.buns._id);
         state.mainsAndSaucesIngr.forEach((i) => {
-          state.composedOrderIngredients.push(i._id);
+          composedIngredients.push(i._id);
         });
-        state.composedOrderIngredients.push(state.buns._id);
+        composedIngredients.push(state.buns._id);
+        state.composedOrderIngredients = composedIngredients;
       }
     }
   },
   selectors: {
     getComposedOrderIngredients: (state) =>
       state.composedOrderIngredients || [],
-    // getOrderFullIngredients: (state) => state.ingredientsFull,
     getOrderBun: (state) => state.buns,
     getOrderMainAndSauces: (state) => state.mainsAndSaucesIngr,
-    getReadyOrders: (state) => state.readyOrders
+    getReadyOrders: (state) => state.readyOrders,
+    getLoader: (state) => state.loading,
+    getJustDoneOrder: (state) => state.justDoneOrder,
+    getOrderByNumber: (state) => state.orderByNumber
   },
   extraReducers: (builder) => {
     builder
@@ -108,6 +116,7 @@ const orderSlice = createSlice({
       })
       .addCase(makeOrderThunk.fulfilled, (state, action) => {
         state.loading = false;
+        state.justDoneOrder = action.payload.order;
         // state.readyOrders.push(action.payload.order);
         state.composedOrderIngredients = [];
         state.mainsAndSaucesIngr = [];
@@ -124,6 +133,18 @@ const orderSlice = createSlice({
       .addCase(getReadyOrdersThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.readyOrders = action.payload;
+      })
+      .addCase(getOrderByNumberThunk.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getOrderByNumberThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getOrderByNumberThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orderByNumber = action.payload;
       });
   }
 });
@@ -138,8 +159,10 @@ export const {
 } = orderSlice.actions;
 export const {
   getComposedOrderIngredients,
-  // getBuns,
   getOrderBun,
   getOrderMainAndSauces,
-  getReadyOrders
+  getReadyOrders,
+  getLoader,
+  getJustDoneOrder,
+  getOrderByNumber
 } = orderSlice.selectors;

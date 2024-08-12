@@ -1,14 +1,15 @@
-import React, { FC, memo } from 'react';
-import { Link } from 'react-router-dom';
 import {
   CurrencyIcon,
   FormattedDate
 } from '@zlden/react-developer-burger-ui-components';
+import React, { FC, memo } from 'react';
 
-import styles from './order-card.module.css';
-
+import { Link } from 'react-router-dom';
 import { OrderCardUIProps } from './type';
 import { OrderStatus } from '@components';
+import { getOrderByNumberThunk } from '../../../slices/orderSlice';
+import styles from './order-card.module.css';
+import { useDispatch } from '../../../services/store';
 
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
   ({ orderInfo, maxIngredients, locationState }) => (

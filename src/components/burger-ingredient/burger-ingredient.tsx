@@ -1,11 +1,5 @@
-import { FC, SyntheticEvent, memo } from 'react';
-import {
-  addIngredientToOrder,
-  composeOrderIngredients,
-  deleteIngredientInOrder,
-  getComposedOrderIngredients,
-  getOrderBun
-} from '../../slices/orderSlice';
+import { FC, memo } from 'react';
+import { addIngredientToOrder, getOrderBun } from '../../slices/orderSlice';
 
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
@@ -18,7 +12,6 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
     const location = useLocation();
     const dispatch = useDispatch();
-    const orderIngredients = useSelector(getComposedOrderIngredients);
     const getBuns = useSelector(getOrderBun);
 
     const handleAdd = () => {

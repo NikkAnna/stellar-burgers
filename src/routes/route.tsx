@@ -11,8 +11,11 @@ import {
   ResetPassword
 } from '@pages';
 import { Route, Routes, createBrowserRouter } from 'react-router-dom';
+import { SyntheticEvent, useState } from 'react';
 
 import { ProtectedRoute } from './protected-route';
+import { getOrderByNumber } from '../slices/orderSlice';
+import { useSelector } from '../services/store';
 
 export const router = createBrowserRouter([
   {
@@ -38,8 +41,12 @@ export const router = createBrowserRouter([
         element: <Feed />
       },
       {
-        path: 'feed/:number',
-        element: <OrderInfo />
+        path: ':number',
+        element: (
+          <Modal title='' onClose={() => {}}>
+            <OrderInfo />
+          </Modal>
+        )
       }
     ]
   },
@@ -105,7 +112,11 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <IngredientDetails />
+        element: (
+          <Modal title={'Детали ингредиента'} onClose={() => {}}>
+            <IngredientDetails />
+          </Modal>
+        )
       }
     ]
   },
@@ -133,7 +144,9 @@ export const router = createBrowserRouter([
         path: 'orders/:number',
         element: (
           <ProtectedRoute>
-            <OrderInfo />
+            <Modal title='' onClose={() => {}}>
+              <OrderInfo />
+            </Modal>
           </ProtectedRoute>
         )
       }
