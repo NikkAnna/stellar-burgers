@@ -7,10 +7,10 @@ import { useSelector } from '../../services/store';
 export const AppHeader: FC = () => {
   const userName = useSelector(getUserName);
 
-  
   return (
-  <>
-    <AppHeaderUI userName={userName} />
-    <Outlet />
-  </>
-)};
+    <>
+      <AppHeaderUI userName={userName} />
+      <Outlet />
+    </>
+  );
+};

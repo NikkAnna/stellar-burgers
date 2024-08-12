@@ -19,7 +19,10 @@ import {
   Routes,
   createBrowserRouter
 } from 'react-router-dom';
-import { getIngredientsLoader, getIngredientsThunk } from '../../slices/ingredientsSlice';
+import {
+  getIngredientsLoader,
+  getIngredientsThunk
+} from '../../slices/ingredientsSlice';
 import { getUser, getUserInfo } from '../../slices/userSlice';
 import store, { useDispatch, useSelector } from '../../services/store';
 
@@ -30,10 +33,9 @@ import styles from './app.module.css';
 import { useEffect } from 'react';
 
 const App = () => {
-  
   const dispatch = useDispatch();
   const user = useSelector(getUserInfo);
-  
+
   useEffect(() => {
     dispatch(getIngredientsThunk());
     dispatch(getFeedThunk());
@@ -41,10 +43,10 @@ const App = () => {
   }, []);
 
   return (
-
-  <div className={styles.app}>
-    <RouterProvider router={router} />
-  </div>
-)};
+    <div className={styles.app}>
+      <RouterProvider router={router} />
+    </div>
+  );
+};
 
 export default App;

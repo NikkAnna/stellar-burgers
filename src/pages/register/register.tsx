@@ -37,13 +37,11 @@ export const Register: FC = () => {
       return <Preloader />;
     }
 
-    dispatch(registerUserThunk({ email, password, name }))
-    .then(() => {
+    dispatch(registerUserThunk({ email, password, name })).then(() => {
       if (error) {
         setErrorText('Такой пользователь уже зарегистрирован');
       }
-    })
-
+    });
   };
 
   return (

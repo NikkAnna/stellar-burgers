@@ -1,5 +1,12 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { getUserErrorSelector, getUserInfo, isAuthentificatedSelector, isUserLoadingSelector, updateUserInfo, updateUserThunk } from '../../slices/userSlice';
+import {
+  getUserErrorSelector,
+  getUserInfo,
+  isAuthentificatedSelector,
+  isUserLoadingSelector,
+  updateUserInfo,
+  updateUserThunk
+} from '../../slices/userSlice';
 import { useDispatch, useSelector } from '../../services/store';
 
 import { Preloader } from '@ui';
@@ -7,7 +14,6 @@ import { ProfileUI } from '@ui-pages';
 import { updateUserApi } from '@api';
 
 export const Profile: FC = () => {
-  
   const userInfo = useSelector(getUserInfo);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(isAuthentificatedSelector);
@@ -85,5 +91,4 @@ export const Profile: FC = () => {
       updateUserError={error}
     />
   );
-
 };

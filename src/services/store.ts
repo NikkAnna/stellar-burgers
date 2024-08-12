@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   ordersFeed: ordersFeedReducer,
   user: userReducer,
-  order: orderReducer,
+  order: orderReducer
 });
 
 export const store = configureStore({

@@ -1,9 +1,9 @@
-import { FC, memo, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import {
   addIngredientToOrder,
   deleteIngredientInOrder,
-  getOrderFullIngredients,
-  getOrderIngredients
+  moveDownIngredientInOrder,
+  moveUpIngredientInOrder
 } from '../../slices/orderSlice';
 
 import { BurgerConstructorElementProps } from './type';
@@ -13,19 +13,24 @@ import { useDispatch } from '../../services/store';
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
     const dispatch = useDispatch();
-    
-    const [newIndex, setNewIndex] = useState(0);
-    
+
+    const [newIndex, setNewIndex] = useState(index);
+
+    useEffect(() => {}, []);
+
     const handleMoveDown = () => {
-      setNewIndex(index - 1)
+      dispatch(moveDownIngredientInOrder(newIndex));
     };
 
     const handleMoveUp = () => {
-      setNewIndex(index + 1)
+      // dispatch(moveUpIngredientInOrder(newIndex));
+      // // setNewIndex((newIndex) => newIndex - 1);
+      // console.log(newIndex)
+      // debugger
     };
 
     const handleClose = () => {
-      dispatch(deleteIngredientInOrder(ingredient.id));
+      dispatch(deleteIngredientInOrder(ingredient));
     };
 
     return (

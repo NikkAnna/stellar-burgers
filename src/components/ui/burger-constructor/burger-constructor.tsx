@@ -9,7 +9,6 @@ import React, { FC } from 'react';
 
 import { BurgerConstructorUIProps } from './type';
 import { TConstructorIngredient } from '@utils-types';
-import { getOrderIngredients } from '../../../slices/orderSlice';
 import styles from './burger-constructor.module.css';
 import { useSelector } from '../../../services/store';
 

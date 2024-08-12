@@ -103,7 +103,7 @@ export const userSlice = createSlice({
       state.isAuthChecked = true;
     },
     updateUserInfo: (state, action) => {
-      state.data = action.payload
+      state.data = action.payload;
     }
     // userLogout: (state) => {
     //   state.data = null;
@@ -197,13 +197,17 @@ export const userSlice = createSlice({
         state.isAuthentificated = false;
         state.isAuthChecked = true;
         state.data = action.payload.user;
-      })
-
+      });
   }
 });
 
 export const userReducer = userSlice.reducer;
-export const { getUserInfo, isAuthentificatedSelector, isAuthCheckedSelector, getUserName, getUserErrorSelector, isUserLoadingSelector } =
-  userSlice.selectors;
+export const {
+  getUserInfo,
+  isAuthentificatedSelector,
+  isAuthCheckedSelector,
+  getUserName,
+  getUserErrorSelector,
+  isUserLoadingSelector
+} = userSlice.selectors;
 export const { authChecked, updateUserInfo } = userSlice.actions;
-

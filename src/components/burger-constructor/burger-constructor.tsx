@@ -1,12 +1,18 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
-import { getOrderBun, getOrderFullIngredients, getOrderId, getOrderIngredients, getOrderMainAndSauces } from '../../slices/orderSlice';
+import {
+  composeOrderIngredients,
+  getComposedOrderIngredients,
+  getOrderBun,
+  getOrderMainAndSauces,
+  makeOrderThunk
+} from '../../slices/orderSlice';
+import { useDispatch, useSelector } from '../../services/store';
 
 import { BurgerConstructorUI } from '@ui';
 import { Navigate } from 'react-router-dom';
 import { getIngredients } from '../../slices/ingredientsSlice';
 import { isAuthentificatedSelector } from '../../slices/userSlice';
-import { useSelector } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -14,32 +20,35 @@ export const BurgerConstructor: FC = () => {
 
   // const isAuthentificated = useSelector(isAuthentificatedSelector);
   const orderIngredients = useSelector(getOrderMainAndSauces);
-  const orderId = useSelector(getOrderId);
   const orderBun = useSelector(getOrderBun);
-
+  const dispatch = useDispatch();
+  const composedOrder = useSelector(getComposedOrderIngredients);
 
   const constructorItems = {
     bun: orderBun || null,
     ingredients: orderIngredients
-  }
-  
+  };
+
   const orderRequest = false;
 
   const orderModalData = null;
 
+  // useEffect(() => {
+  //   dispatch(composeOrderIngredients());
+  // }, [constructorItems])
+
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-    
+    dispatch(composeOrderIngredients());
+    dispatch(makeOrderThunk(composedOrder)).then((data) => {
+      console.log(data.payload);
+    });
   };
 
-  const closeOrderModal = () => {
-    
-  };
+  const closeOrderModal = () => {};
 
   const price = useMemo(
     () =>
-      
-      
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
       constructorItems.ingredients.reduce(
         (s: number, v: TConstructorIngredient) => s + v.price,

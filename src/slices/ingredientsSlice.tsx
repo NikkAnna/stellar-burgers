@@ -69,6 +69,11 @@ const ingredientsSlice = createSlice({
 });
 
 export const ingredientsReducer = ingredientsSlice.reducer;
-export const { getIngredients, getBuns, getMains, getSauces, getIngredientsLoader } =
-  ingredientsSlice.selectors;
+export const {
+  getIngredients,
+  getBuns,
+  getMains,
+  getSauces,
+  getIngredientsLoader
+} = ingredientsSlice.selectors;
 // export const { getIngredientById } = ingredientsSlice.actions;
