@@ -7,10 +7,11 @@ import { FeedUI } from '@ui-pages';
 import { Preloader } from '@ui';
 import { TOrder } from '@utils-types';
 import { getOrdersFeed } from '../../slices/feedSlice';
+import { useLocation } from 'react-router-dom';
 
 export const Feed: FC = () => {
   const orders = useSelector(getOrdersFeed);
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
 
   if (orders.loading) {
     return <Preloader />;
@@ -25,7 +26,7 @@ export const Feed: FC = () => {
   }
 
   const handleGetFeeds = () => {
-    store.dispatch(getFeedThunk());
+    dispatch(getFeedThunk());
   };
 
   return (

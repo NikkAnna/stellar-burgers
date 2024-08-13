@@ -81,6 +81,7 @@ const orderSlice = createSlice({
         state.mainsAndSaucesIngr.splice(action.payload, 1)[0]
       );
     },
+    resetJustDoneOrder: (state) => {state.justDoneOrder = null},
     composeOrderIngredients: (state) => {
       if (state.buns && state.mainsAndSaucesIngr) {
         const composedIngredients = [];
@@ -117,7 +118,6 @@ const orderSlice = createSlice({
       .addCase(makeOrderThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.justDoneOrder = action.payload.order;
-        // state.readyOrders.push(action.payload.order);
         state.composedOrderIngredients = [];
         state.mainsAndSaucesIngr = [];
         state.buns = null;
@@ -155,7 +155,8 @@ export const {
   deleteIngredientInOrder,
   moveUpIngredientInOrder,
   moveDownIngredientInOrder,
-  composeOrderIngredients
+  composeOrderIngredients,
+  resetJustDoneOrder
 } = orderSlice.actions;
 export const {
   getComposedOrderIngredients,

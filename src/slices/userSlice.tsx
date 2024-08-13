@@ -7,7 +7,7 @@ import {
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
+import { getCookie, setCookie } from '../utils/cookie';
 
 import { TUser } from '@utils-types';
 
@@ -54,21 +54,6 @@ export const checkUserAuth = createAsyncThunk(
   }
 );
 
-// export const logoutUserThunk = createAsyncThunk(
-//   'user/logout',
-//   (_, { dispatch }) => {
-//     logoutApi()
-//       .then(() => {
-//         localStorage.clear();
-//         deleteCookie('accessToken');
-//         dispatch(userLogout());
-//       })
-//       .catch(() => {
-//         console.log('Ошибка выполнения выхода');
-//       });
-//   }
-// );
-
 export const logoutUserThunk = createAsyncThunk(
   'user/logout',
   async () => await logoutApi()
@@ -105,9 +90,6 @@ export const userSlice = createSlice({
     updateUserInfo: (state, action) => {
       state.data = action.payload;
     }
-    // userLogout: (state) => {
-    //   state.data = null;
-    // }
   },
   selectors: {
     getUserInfo: (state) => state.data,

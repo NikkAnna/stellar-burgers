@@ -9,12 +9,12 @@ import { useDispatch, useSelector } from '../../services/store';
 import { OrderInfoUI } from '../ui/order-info';
 import { Preloader } from '../ui/preloader';
 import { TIngredient } from '@utils-types';
-import { getIngredients } from '../../slices/ingredientsSlice';
+import { getIngredients, } from '../../slices/ingredientsSlice';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
-  const loader = useSelector(getLoader);
+  const orderLoader = useSelector(getLoader);
   let number = useParams().number;
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const OrderInfo: FC = () => {
 
   return (
     <>
-      {loader && <Preloader />}
+      {orderLoader && <Preloader />}
       {orderInfo && <OrderInfoUI orderInfo={orderInfo} />}
     </>
   );

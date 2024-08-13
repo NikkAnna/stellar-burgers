@@ -30,12 +30,6 @@ const ordersFeedSlice = createSlice({
   reducers: {},
   selectors: {
     getOrdersFeed: (state) => state
-    //     getBuns: (state) =>
-    //       state.ingredients.filter((ingredient) => ingredient.type === 'bun'),
-    //     getMains: (state) =>
-    //       state.ingredients.filter((ingredient) => ingredient.type === 'main'),
-    //     getSauces: (state) =>
-    //       state.ingredients.filter((ingredient) => ingredient.type === 'sauce')
   },
   extraReducers: (builder) => {
     builder

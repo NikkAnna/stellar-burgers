@@ -1,6 +1,4 @@
-import { BurgerConstructorUI, Preloader } from '@ui';
 import { FC, useEffect, useMemo } from 'react';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
 import {
   composeOrderIngredients,
   getComposedOrderIngredients,
@@ -8,13 +6,15 @@ import {
   getLoader,
   getOrderBun,
   getOrderMainAndSauces,
-  makeOrderThunk
+  makeOrderThunk,
+  resetJustDoneOrder
 } from '../../slices/orderSlice';
 import { useDispatch, useSelector } from '../../services/store';
 
-import { Navigate } from 'react-router-dom';
-import { getIngredients } from '../../slices/ingredientsSlice';
+import { BurgerConstructorUI } from '@ui';
+import { TConstructorIngredient } from '@utils-types';
 import { isAuthentificatedSelector } from '../../slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const orderIngredients = useSelector(getOrderMainAndSauces);
@@ -22,6 +22,7 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const composedOrder = useSelector(getComposedOrderIngredients);
   const orderModal = useSelector(getJustDoneOrder);
+  const navigate = useNavigate();
 
   const constructorItems = {
     bun: orderBun || null,
@@ -29,6 +30,7 @@ export const BurgerConstructor: FC = () => {
   };
 
   const orderRequest = useSelector(getLoader);
+  const isAuthentificated = useSelector(isAuthentificatedSelector);
 
   const orderModalData = orderModal || null;
 
@@ -38,10 +40,16 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
-    dispatch(makeOrderThunk(composedOrder));
+    if (isAuthentificated) {
+      dispatch(makeOrderThunk(composedOrder));
+    } else {
+      navigate('/login');
+    }
   };
 
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispatch(resetJustDoneOrder());
+  };
 
   const price = useMemo(
     () =>

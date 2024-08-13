@@ -1,12 +1,14 @@
-import { FC, memo, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { FC, memo, useEffect, useState } from 'react';
 
-import { TModalProps } from './type';
 import { ModalUI } from '@ui';
+import ReactDOM from 'react-dom';
+import { TModalProps } from './type';
 
 const modalRoot = document.getElementById('modals');
 
 export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
+
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       e.key === 'Escape' && onClose();
