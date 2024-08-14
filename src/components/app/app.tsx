@@ -28,7 +28,7 @@ const App = () => {
   const order = useSelector(getOrderByNumber);
   const location = useLocation();
 
-  const handleModalClose = () => navigate(-1);
+  const handleModalClose = (url: string) => navigate(url);
   const backgroundLocation = location.state?.background;
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const App = () => {
               element={
                 <Modal
                   title={`#${order?.number}` || ''}
-                  onClose={handleModalClose}
+                  onClose={() => handleModalClose('feed')}
                 >
                   <OrderInfo />
                 </Modal>
@@ -133,7 +133,7 @@ const App = () => {
                 <ProtectedRoute>
                   <Modal
                     title={`#${order?.number}` || ''}
-                    onClose={handleModalClose}
+                    onClose={() => handleModalClose('profile/orders')}
                   >
                     <OrderInfo />
                   </Modal>
@@ -148,7 +148,10 @@ const App = () => {
             <Route
               path='/ingredients/:id'
               element={
-                <Modal title={'Детали ингредиента'} onClose={handleModalClose}>
+                <Modal
+                  title={'Детали ингредиента'}
+                  onClose={() => handleModalClose('/')}
+                >
                   <IngredientDetails />
                 </Modal>
               }

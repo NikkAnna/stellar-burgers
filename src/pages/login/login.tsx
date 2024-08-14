@@ -24,6 +24,10 @@ export const Login: FC = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    setErrorText('');
+  }, []);
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 

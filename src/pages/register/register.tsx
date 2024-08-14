@@ -25,6 +25,10 @@ export const Register: FC = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    setErrorText('');
+  }, []);
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 

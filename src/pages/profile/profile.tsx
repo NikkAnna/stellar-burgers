@@ -35,6 +35,10 @@ export const Profile: FC = () => {
     }
   }, [userError]);
 
+  useEffect(() => {
+    setError('');
+  }, []);
+
   const isFormChanged =
     formValue.name !== user?.name ||
     formValue.email !== user?.email ||
