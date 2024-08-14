@@ -1,6 +1,5 @@
-import { FC, memo, useEffect, useRef, useState } from 'react';
+import { FC, memo, useEffect } from 'react';
 import {
-  addIngredientToOrder,
   deleteIngredientInOrder,
   moveDownIngredientInOrder,
   moveUpIngredientInOrder
@@ -14,19 +13,14 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
     const dispatch = useDispatch();
 
-    const [newIndex, setNewIndex] = useState(index);
-
     useEffect(() => {}, []);
 
     const handleMoveDown = () => {
-      dispatch(moveDownIngredientInOrder(newIndex));
+      dispatch(moveDownIngredientInOrder(index));
     };
 
     const handleMoveUp = () => {
-      // dispatch(moveUpIngredientInOrder(newIndex));
-      // // setNewIndex((newIndex) => newIndex - 1);
-      // console.log(newIndex)
-      // debugger
+      dispatch(moveUpIngredientInOrder(index));
     };
 
     const handleClose = () => {
@@ -36,7 +30,7 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
     return (
       <BurgerConstructorElementUI
         ingredient={ingredient}
-        index={newIndex}
+        index={index}
         totalItems={totalItems}
         handleMoveUp={handleMoveUp}
         handleMoveDown={handleMoveDown}

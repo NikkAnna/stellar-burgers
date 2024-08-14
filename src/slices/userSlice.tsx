@@ -69,6 +69,9 @@ type TUserState = {
   isAuthentificated: boolean;
   data: TUser | null;
   loginUserError: string | undefined;
+  registrationUserError: string | undefined;
+  logoutUserError: string | undefined;
+  updateUserError: string | undefined;
   loading: boolean;
 };
 
@@ -77,6 +80,9 @@ const initialState: TUserState = {
   isAuthentificated: false,
   data: null,
   loginUserError: '',
+  registrationUserError: '',
+  logoutUserError: '',
+  updateUserError: '',
   loading: false
 };
 
@@ -96,18 +102,21 @@ export const userSlice = createSlice({
     isAuthentificatedSelector: (state) => state.isAuthentificated,
     isAuthCheckedSelector: (state) => state.isAuthChecked,
     getUserName: (state) => state.data?.name,
-    getUserErrorSelector: (state) => state.loginUserError,
+    getUserLoginErrorSelector: (state) => state.loginUserError,
+    getUserRegistrationErrorSelector: (state) => state.registrationUserError,
+    getUserLogoutErrorSelector: (state) => state.logoutUserError,
+    getUpdateUserErrorSelector: (state) => state.updateUserError,
     isUserLoadingSelector: (state) => state.loading
   },
   extraReducers: (builder) => {
     builder
       .addCase(registerUserThunk.pending, (state) => {
         state.loading = true;
-        state.loginUserError = '';
+        state.registrationUserError = '';
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
         state.loading = false;
-        state.loginUserError = action.error.message;
+        state.registrationUserError = action.error.message;
         state.isAuthChecked = true;
       })
       .addCase(registerUserThunk.fulfilled, (state, action) => {
@@ -150,11 +159,11 @@ export const userSlice = createSlice({
       })
       .addCase(logoutUserThunk.pending, (state) => {
         state.loading = true;
-        state.loginUserError = '';
+        state.logoutUserError = '';
       })
       .addCase(logoutUserThunk.rejected, (state, action) => {
         state.loading = false;
-        state.loginUserError = action.error.message;
+        state.logoutUserError = action.error.message;
         state.isAuthChecked = true;
         state.isAuthentificated = true;
       })
@@ -166,11 +175,11 @@ export const userSlice = createSlice({
       })
       .addCase(updateUserThunk.pending, (state) => {
         state.loading = true;
-        state.loginUserError = '';
+        state.updateUserError = '';
       })
       .addCase(updateUserThunk.rejected, (state, action) => {
         state.loading = false;
-        state.loginUserError = action.error.message;
+        state.updateUserError = action.error.message;
         state.isAuthChecked = true;
         state.isAuthentificated = true;
       })
@@ -189,7 +198,10 @@ export const {
   isAuthentificatedSelector,
   isAuthCheckedSelector,
   getUserName,
-  getUserErrorSelector,
-  isUserLoadingSelector
+  getUserLoginErrorSelector,
+  isUserLoadingSelector,
+  getUserRegistrationErrorSelector,
+  getUserLogoutErrorSelector,
+  getUpdateUserErrorSelector
 } = userSlice.selectors;
 export const { authChecked, updateUserInfo } = userSlice.actions;

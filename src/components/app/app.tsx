@@ -43,18 +43,11 @@ const App = () => {
         <Routes location={backgroundLocation || location}>
           <Route path='*' element={<NotFound404 />} />
           <Route path='/' element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />} />
-          <Route
-              path='/feed/:number'
-              element={
-                <Modal
-                  title={`#${order?.number}` || ''}
-                  onClose={handleModalClose}
-                >
-                  <OrderInfo />
-                </Modal>
-              }
-            />
+          <Route path='/feed'>
+            <Route index element={<Feed />} />
+            <Route path=':number' element={<OrderInfo />} />
+          </Route>
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
           <Route
             path='/login'
             element={
@@ -102,6 +95,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <ProfileOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='orders/:number'
+              element={
+                <ProtectedRoute>
+                  <OrderInfo />
                 </ProtectedRoute>
               }
             />

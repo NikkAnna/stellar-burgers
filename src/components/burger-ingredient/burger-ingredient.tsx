@@ -3,7 +3,6 @@ import { addIngredientToOrder, getOrderBun } from '../../slices/orderSlice';
 
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
-import { TConstructorIngredient } from '@utils-types';
 import { useDispatch } from '../../services/store';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';

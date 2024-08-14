@@ -1,24 +1,20 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import {
-  getUserErrorSelector,
+  getUpdateUserErrorSelector,
   getUserInfo,
-  isAuthentificatedSelector,
   isUserLoadingSelector,
-  updateUserInfo,
   updateUserThunk
 } from '../../slices/userSlice';
 import { useDispatch, useSelector } from '../../services/store';
 
 import { Preloader } from '@ui';
 import { ProfileUI } from '@ui-pages';
-import { updateUserApi } from '@api';
 
 export const Profile: FC = () => {
   const userInfo = useSelector(getUserInfo);
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(isAuthentificatedSelector);
   const loading = useSelector(isUserLoadingSelector);
-  const userError = useSelector(getUserErrorSelector);
+  const userError = useSelector(getUpdateUserErrorSelector);
 
   const user = {
     name: userInfo?.name || '',
@@ -33,6 +29,12 @@ export const Profile: FC = () => {
 
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (userError) {
+      setError('Ошибка в обновлении данных');
+    }
+  }, [userError]);
+
   const isFormChanged =
     formValue.name !== user?.name ||
     formValue.email !== user?.email ||
@@ -41,9 +43,6 @@ export const Profile: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     if (isFormChanged) {
-      if (loading) {
-        return <Preloader />;
-      }
       dispatch(
         updateUserThunk({
           name: formValue.name,
@@ -51,10 +50,6 @@ export const Profile: FC = () => {
           password: formValue.password
         })
       ).then(() => {
-        if (userError) {
-          setError(userError);
-          return;
-        }
         setFormValue({
           name: formValue.name,
           email: formValue.email,
@@ -80,6 +75,10 @@ export const Profile: FC = () => {
       [e.target.name]: e.target.value
     }));
   };
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <ProfileUI

@@ -1,12 +1,10 @@
-import { FC, SyntheticEvent, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import {
-  getUserErrorSelector,
-  isAuthentificatedSelector,
+  getUserLoginErrorSelector,
   isUserLoadingSelector,
   loginUserThunk
 } from '../../slices/userSlice';
-import store, { useDispatch, useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 
 import { LoginUI } from '@ui-pages';
 import { Preloader } from '@ui';
@@ -18,7 +16,13 @@ export const Login: FC = () => {
 
   const dispatch = useDispatch();
   const loading = useSelector(isUserLoadingSelector);
-  const error = useSelector(getUserErrorSelector);
+  const error = useSelector(getUserLoginErrorSelector);
+
+  useEffect(() => {
+    if (error) {
+      setErrorText('Некорректный e-mail или пароль');
+    }
+  }, [error]);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -28,12 +32,12 @@ export const Login: FC = () => {
       return;
     }
 
-    dispatch(loginUserThunk({ email, password })).then(() => {
-      if (error) {
-        setErrorText('Некорректный пароль');
-      }
-    });
+    dispatch(loginUserThunk({ email, password }));
   };
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <LoginUI

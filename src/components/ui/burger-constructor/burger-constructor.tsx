@@ -5,12 +5,11 @@ import {
   CurrencyIcon
 } from '@zlden/react-developer-burger-ui-components';
 import { OrderDetailsUI, Preloader } from '@ui';
-import React, { FC } from 'react';
 
 import { BurgerConstructorUIProps } from './type';
+import { FC } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import styles from './burger-constructor.module.css';
-import { useSelector } from '../../../services/store';
 
 export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   constructorItems,
@@ -20,15 +19,6 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   onOrderClick,
   closeOrderModal
 }) => (
-  // const orderIngredients = useSelector(getOrderIngredients);
-
-  // function countNumberOfIndredients(id: string): number {
-  //   const filteredIngredients = orderIngredients.filter((i) => i === id);
-  //   const number = filteredIngredients.length;
-  //   console.log(number)
-  //   return number;
-  // }
-
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
       <div className={`${styles.element} mb-4 mr-4`}>

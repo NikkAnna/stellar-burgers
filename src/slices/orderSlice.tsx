@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
+import { TConstructorIngredient, TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
 
 type TOrderState = {
@@ -81,7 +81,9 @@ const orderSlice = createSlice({
         state.mainsAndSaucesIngr.splice(action.payload, 1)[0]
       );
     },
-    resetJustDoneOrder: (state) => {state.justDoneOrder = null},
+    resetJustDoneOrder: (state) => {
+      state.justDoneOrder = null;
+    },
     composeOrderIngredients: (state) => {
       if (state.buns && state.mainsAndSaucesIngr) {
         const composedIngredients = [];

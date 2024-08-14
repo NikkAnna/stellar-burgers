@@ -1,10 +1,6 @@
-import { FC, SyntheticEvent, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import {
-  checkUserAuth,
-  getUser,
-  getUserErrorSelector,
-  isAuthentificatedSelector,
+  getUserRegistrationErrorSelector,
   isUserLoadingSelector,
   registerUserThunk
 } from '../../slices/userSlice';
@@ -20,10 +16,14 @@ export const Register: FC = () => {
   const [errorText, setErrorText] = useState('');
 
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(isAuthentificatedSelector);
   const loading = useSelector(isUserLoadingSelector);
-  const location = useLocation();
-  const error = useSelector(getUserErrorSelector);
+  const error = useSelector(getUserRegistrationErrorSelector);
+
+  useEffect(() => {
+    if (error) {
+      setErrorText('Такой пользователь уже зарегистрирован');
+    }
+  }, [error]);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -33,16 +33,12 @@ export const Register: FC = () => {
       return;
     }
 
-    if (loading) {
-      return <Preloader />;
-    }
-
-    dispatch(registerUserThunk({ email, password, name })).then(() => {
-      if (error) {
-        setErrorText('Такой пользователь уже зарегистрирован');
-      }
-    });
+    dispatch(registerUserThunk({ email, password, name }));
   };
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <RegisterUI
