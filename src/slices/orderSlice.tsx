@@ -1,6 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TOrder } from '@utils-types';
+import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+
+import { v4 as uuidv4 } from 'uuid';
 
 type TOrderState = {
   composedOrderIngredients: string[];
@@ -8,6 +10,7 @@ type TOrderState = {
   error: string | undefined;
   buns: TConstructorIngredient | null;
   mainsAndSaucesIngr: Array<TConstructorIngredient>;
+  numberOfIngredients: number;
   readyOrders: Array<TOrder>;
   justDoneOrder: TOrder | null;
   orderByNumber: TOrder | undefined;
@@ -19,6 +22,7 @@ const initialState: TOrderState = {
   error: '',
   buns: null,
   mainsAndSaucesIngr: [],
+  numberOfIngredients: 0,
   readyOrders: [],
   justDoneOrder: null,
   orderByNumber: undefined
@@ -48,15 +52,22 @@ const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    addIngredientToOrder: (
-      state,
-      action: PayloadAction<TConstructorIngredient>
-    ) => {
-      if (action.payload.type === 'bun') {
+    addBunToOrder: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         state.buns = action.payload;
+      },
+      prepare: (ingredient: TIngredient) => {
+        const id = uuidv4();
+        return { payload: { ...ingredient, id } };
       }
-      if (action.payload.type !== 'bun') {
+    },
+    addMainsAndSaucesToOrder: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         state.mainsAndSaucesIngr.push(action.payload);
+      },
+      prepare: (ingredient: TIngredient) => {
+        const id = uuidv4();
+        return { payload: { ...ingredient, id } };
       }
     },
     deleteIngredientInOrder: (
@@ -153,12 +164,13 @@ const orderSlice = createSlice({
 
 export const orderReducer = orderSlice.reducer;
 export const {
-  addIngredientToOrder,
+  addBunToOrder,
   deleteIngredientInOrder,
   moveUpIngredientInOrder,
   moveDownIngredientInOrder,
   composeOrderIngredients,
-  resetJustDoneOrder
+  resetJustDoneOrder,
+  addMainsAndSaucesToOrder
 } = orderSlice.actions;
 export const {
   getComposedOrderIngredients,

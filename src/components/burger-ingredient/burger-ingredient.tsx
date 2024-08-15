@@ -1,11 +1,14 @@
 import { FC, memo } from 'react';
-import { addIngredientToOrder, getOrderBun } from '../../slices/orderSlice';
+import {
+  addBunToOrder,
+  addMainsAndSaucesToOrder,
+  getOrderBun
+} from '../../slices/orderSlice';
+import { useDispatch, useSelector } from '../../services/store';
 
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
-import { useDispatch } from '../../services/store';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
@@ -14,51 +17,17 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const getBuns = useSelector(getOrderBun);
 
     const handleAdd = () => {
-      const generateRandomString = (length: number) => {
-        const test = Math.random()
-          .toString(36)
-          .substring(2, length + 2);
-        return test;
-      };
-
       if (ingredient.type === 'bun') {
         if (getBuns) {
           if (getBuns?._id === ingredient._id) {
             return;
           }
-          dispatch(
-            addIngredientToOrder(
-              Object.assign(
-                { ...ingredient },
-                {
-                  id: generateRandomString(9)
-                }
-              )
-            )
-          );
+          dispatch(addBunToOrder(ingredient));
         } else {
-          dispatch(
-            addIngredientToOrder(
-              Object.assign(
-                { ...ingredient },
-                {
-                  id: generateRandomString(9)
-                }
-              )
-            )
-          );
+          dispatch(addBunToOrder(ingredient));
         }
       } else {
-        dispatch(
-          addIngredientToOrder(
-            Object.assign(
-              { ...ingredient },
-              {
-                id: generateRandomString(9)
-              }
-            )
-          )
-        );
+        dispatch(addMainsAndSaucesToOrder(ingredient));
       }
     };
 
