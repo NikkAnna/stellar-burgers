@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import { BurgerConstructorElement, Modal } from '@components';
 import {
   Button,
   ConstructorElement,
   CurrencyIcon
 } from '@zlden/react-developer-burger-ui-components';
-import styles from './burger-constructor.module.css';
+import { OrderDetailsUI, Preloader } from '@ui';
+
 import { BurgerConstructorUIProps } from './type';
+import { FC } from 'react';
 import { TConstructorIngredient } from '@utils-types';
-import { BurgerConstructorElement, Modal } from '@components';
-import { Preloader, OrderDetailsUI } from '@ui';
+import styles from './burger-constructor.module.css';
 
 export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   constructorItems,

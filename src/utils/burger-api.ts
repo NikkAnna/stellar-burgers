@@ -1,5 +1,5 @@
-import { setCookie, getCookie } from './cookie';
-import { TIngredient, TOrder, TOrdersData, TUser } from './types';
+import { TIngredient, TOrder, TUser } from './types';
+import { deleteCookie, getCookie, setCookie } from './cookie';
 
 const URL = process.env.BURGER_API_URL;
 
@@ -232,4 +232,12 @@ export const logoutApi = () =>
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
     })
-  }).then((res) => checkResponse<TServerResponse<{}>>(res));
+  })
+    .then((res) => checkResponse<TServerResponse<{}>>(res))
+    .then(() => {
+      localStorage.clear();
+      deleteCookie('accessToken');
+    })
+    .catch(() => {
+      console.log('Ошибка выполнения выхода');
+    });

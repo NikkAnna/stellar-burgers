@@ -1,11 +1,24 @@
-import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import {
+  getUpdateUserErrorSelector,
+  getUserInfo,
+  isUserLoadingSelector,
+  updateUserThunk
+} from '../../slices/userSlice';
+import { useDispatch, useSelector } from '../../services/store';
+
+import { Preloader } from '@ui';
+import { ProfileUI } from '@ui-pages';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
+  const userInfo = useSelector(getUserInfo);
+  const dispatch = useDispatch();
+  const loading = useSelector(isUserLoadingSelector);
+  const userError = useSelector(getUpdateUserErrorSelector);
+
   const user = {
-    name: '',
-    email: ''
+    name: userInfo?.name || '',
+    email: userInfo?.email || ''
   };
 
   const [formValue, setFormValue] = useState({
@@ -14,13 +27,17 @@ export const Profile: FC = () => {
     password: ''
   });
 
+  const [error, setError] = useState('');
+
   useEffect(() => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      name: user?.name || '',
-      email: user?.email || ''
-    }));
-  }, [user]);
+    if (userError) {
+      setError('Ошибка в обновлении данных');
+    }
+  }, [userError]);
+
+  useEffect(() => {
+    setError('');
+  }, []);
 
   const isFormChanged =
     formValue.name !== user?.name ||
@@ -29,6 +46,21 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    if (isFormChanged) {
+      dispatch(
+        updateUserThunk({
+          name: formValue.name,
+          email: formValue.email,
+          password: formValue.password
+        })
+      ).then(() => {
+        setFormValue({
+          name: formValue.name,
+          email: formValue.email,
+          password: ''
+        });
+      });
+    }
   };
 
   const handleCancel = (e: SyntheticEvent) => {
@@ -41,11 +73,16 @@ export const Profile: FC = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(isFormChanged);
     setFormValue((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value
     }));
   };
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <ProfileUI
@@ -54,8 +91,7 @@ export const Profile: FC = () => {
       handleCancel={handleCancel}
       handleSubmit={handleSubmit}
       handleInputChange={handleInputChange}
+      updateUserError={error}
     />
   );
-
-  return null;
 };
