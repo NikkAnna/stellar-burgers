@@ -9,7 +9,7 @@ export type TOrderFeedState = {
   error: string | undefined;
 };
 
-const initialState: TOrderFeedState = {
+export const initialState: TOrderFeedState = {
   orders: {
     orders: [],
     total: 0,

@@ -9,7 +9,7 @@ export type TIngredienstsState = {
   error: string | undefined;
 };
 
-const initialState: TIngredienstsState = {
+export const initialState: TIngredienstsState = {
   ingredients: [],
   loading: false,
   error: ''

@@ -19,7 +19,7 @@ export type TOrderState = {
   orderByNumber: TOrder | undefined;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   composedOrderIngredients: [],
   loading: false,
   error: '',
