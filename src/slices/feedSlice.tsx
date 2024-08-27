@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { TOrdersData } from '@utils-types';
-import { getFeedsApi } from '@api';
+import { getFeedsApi } from '../utils/burger-api';
 
-type TOrderFeedState = {
+export type TOrderFeedState = {
   orders: TOrdersData;
   loading: boolean;
   error: string | undefined;
