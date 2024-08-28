@@ -19,6 +19,7 @@ import { ProtectedRoute } from '../../routes/protected-route';
 import { getFeedThunk } from '../../slices/feedSlice';
 import { getIngredientsThunk } from '../../slices/ingredientsSlice';
 import { getOrderByNumber } from '../../slices/orderSlice';
+import { getUser } from '../../slices/userSlice';
 import styles from './app.module.css';
 import { useEffect } from 'react';
 
@@ -34,6 +35,7 @@ const App = () => {
   useEffect(() => {
     dispatch(getIngredientsThunk());
     dispatch(getFeedThunk());
+    dispatch(getUser());
   }, []);
 
   return (

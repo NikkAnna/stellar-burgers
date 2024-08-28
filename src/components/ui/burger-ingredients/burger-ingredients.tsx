@@ -1,9 +1,9 @@
 import React, { FC, memo } from 'react';
-import { Tab } from '@zlden/react-developer-burger-ui-components';
 
-import styles from './burger-ingredients.module.css';
 import { BurgerIngredientsUIProps } from './type';
 import { IngredientsCategory } from '@components';
+import { Tab } from '@zlden/react-developer-burger-ui-components';
+import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
   ({
@@ -48,18 +48,21 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
             titleRef={titleBunRef}
             ingredients={buns}
             ref={bunsRef}
+            data-cy='buns-category'
           />
           <IngredientsCategory
             title='Начинки'
             titleRef={titleMainRef}
             ingredients={mains}
             ref={mainsRef}
+            data-cy='mains-category'
           />
           <IngredientsCategory
             title='Соусы'
             titleRef={titleSaucesRef}
             ingredients={sauces}
             ref={saucesRef}
+            data-cy='sauces-category'
           />
         </div>
       </section>

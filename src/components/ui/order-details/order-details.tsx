@@ -1,13 +1,16 @@
-import React from 'react';
-import styles from './order-details.module.css';
-import doneImg from '../../../images/done.svg';
 import { OrderDetailsUIProps } from './type';
+import React from 'react';
+import doneImg from '../../../images/done.svg';
+import styles from './order-details.module.css';
 
 export const OrderDetailsUI: React.FC<OrderDetailsUIProps> = ({
   orderNumber
 }) => (
   <>
-    <h2 className={`${styles.title} text text_type_digits-large mt-2 mb-4`}>
+    <h2
+      className={`${styles.title} text text_type_digits-large mt-2 mb-4`}
+      data-cy='order-number'
+    >
       {orderNumber}
     </h2>
     <p className='text text_type_main-medium'>идентификатор заказа</p>

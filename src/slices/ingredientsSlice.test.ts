@@ -6,7 +6,6 @@ import {
 import { describe, expect, test } from '@jest/globals';
 
 describe('тесты редьюсера ingredientsSlice', () => {
-
   const initialState: TIngredienstsState = {
     ingredients: [],
     loading: false,
