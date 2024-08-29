@@ -1,28 +1,30 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '../utils/burger-api';
 
 import { v4 as uuidv4 } from 'uuid';
 
-type TOrderState = {
+export type TOrderState = {
   composedOrderIngredients: string[];
   loading: boolean;
   error: string | undefined;
   buns: TConstructorIngredient | null;
   mainsAndSaucesIngr: Array<TConstructorIngredient>;
-  numberOfIngredients: number;
   readyOrders: Array<TOrder>;
   justDoneOrder: TOrder | null;
   orderByNumber: TOrder | undefined;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   composedOrderIngredients: [],
   loading: false,
   error: '',
   buns: null,
   mainsAndSaucesIngr: [],
-  numberOfIngredients: 0,
   readyOrders: [],
   justDoneOrder: null,
   orderByNumber: undefined

@@ -5,7 +5,7 @@ import {
   logoutApi,
   registerUserApi,
   updateUserApi
-} from '@api';
+} from '../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getCookie, setCookie } from '../utils/cookie';
 
@@ -64,7 +64,7 @@ export const updateUserThunk = createAsyncThunk(
   async (data: TUserData) => await updateUserApi(data)
 );
 
-type TUserState = {
+export type TUserState = {
   isAuthChecked: boolean;
   isAuthentificated: boolean;
   data: TUser | null;
@@ -75,7 +75,7 @@ type TUserState = {
   loading: boolean;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: false,
   isAuthentificated: false,
   data: null,
@@ -92,9 +92,6 @@ export const userSlice = createSlice({
   reducers: {
     authChecked: (state) => {
       state.isAuthChecked = true;
-    },
-    updateUserInfo: (state, action) => {
-      state.data = action.payload;
     }
   },
   selectors: {
@@ -185,7 +182,7 @@ export const userSlice = createSlice({
       })
       .addCase(updateUserThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthentificated = false;
+        state.isAuthentificated = true;
         state.isAuthChecked = true;
         state.data = action.payload.user;
       });
@@ -204,4 +201,4 @@ export const {
   getUserLogoutErrorSelector,
   getUpdateUserErrorSelector
 } = userSlice.selectors;
-export const { authChecked, updateUserInfo } = userSlice.actions;
+export const { authChecked } = userSlice.actions;
